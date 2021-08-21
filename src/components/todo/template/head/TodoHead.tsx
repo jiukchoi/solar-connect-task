@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 
 const TodoHeadBlock = styled.div`
@@ -21,15 +21,36 @@ const DayText = styled.div`
   padding-top: 5px;
 `;
 
+const WEEK = ['Sun', 'Mon', 'Tue', 'Wed', 'Thur', 'Fri', 'Sat'];
+const MONTH = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
 const TodoHead = () => {
   //@TODO 현재 시간을 표시해야합니다.
-  const dayString = "Tuesday";
-  const dateString = "July 20, 2021";
+  const date = new Date();
+  const day = WEEK[date.getDay()];
+  const months = MONTH[date.getMonth()];
+  const dates = String(date.getDate()).padStart(2, '0');
+  const years = date.getFullYear();
+  const hours = String(date.getHours()).padStart(2, '0');
+  const mins = String(date.getMinutes()).padStart(2, '0');
+  const [timer, setTimer] = useState(`${months} ${dates}, ${years} ${hours}:${mins}`);
+  const getTime = () => {
+    setInterval(() => {
+      const date = new Date();
+      const hours = String(date.getHours()).padStart(2, '0');
+      const mins = String(date.getMinutes()).padStart(2, '0');
+      setTimer(`${months} ${dates}, ${years} ${hours}:${mins}`);
+    }, 1000)
+  }
+
+  useEffect(() => {
+    getTime();
+  }, [])
 
   return (
     <TodoHeadBlock>
-      <DayText>{dayString}</DayText>
-      <DateText>{dateString}</DateText>
+      <DayText>{day}</DayText>
+      <DateText>{timer}</DateText>
     </TodoHeadBlock>
   );
 };
