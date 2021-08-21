@@ -24,8 +24,7 @@ const DayText = styled.div`
 const WEEK = ['Sun', 'Mon', 'Tue', 'Wed', 'Thur', 'Fri', 'Sat'];
 const MONTH = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
-const TodoHead = () => {
-  //@TODO 현재 시간을 표시해야합니다.
+const getDate = () => {
   const date = new Date();
   const day = WEEK[date.getDay()];
   const months = MONTH[date.getMonth()];
@@ -33,18 +32,24 @@ const TodoHead = () => {
   const years = date.getFullYear();
   const hours = String(date.getHours()).padStart(2, '0');
   const mins = String(date.getMinutes()).padStart(2, '0');
-  const [timer, setTimer] = useState(`${months} ${dates}, ${years} ${hours}:${mins}`);
-  const getTime = () => {
-    setInterval(() => {
-      const date = new Date();
-      const hours = String(date.getHours()).padStart(2, '0');
-      const mins = String(date.getMinutes()).padStart(2, '0');
-      setTimer(`${months} ${dates}, ${years} ${hours}:${mins}`);
-    }, 1000)
+  return { day, months, dates, years, hours, mins };
+};
+
+const TodoHead = () => {
+  //@TODO 현재 시간을 표시해야합니다.
+  const [day, setDay] = useState('');
+  const [timer, setTimer] = useState('');
+  const getTimer = () => {
+    const { dates, day, hours, mins, months, years } = getDate();
+    setDay(day);
+    setTimer(`${months} ${dates}, ${years} ${hours}:${mins}`);
   }
 
   useEffect(() => {
-    getTime();
+    getTimer();
+    setInterval(() => {
+      getTimer();
+    }, 1000)
   }, [])
 
   return (
