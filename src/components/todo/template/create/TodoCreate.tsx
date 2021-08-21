@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { PlusCircleOutlined } from "@ant-design/icons";
 import { Itodo } from "../../TodoService"
 import DatePickerContainer from "../../../common/DatePicker";
+import ModalContainer from "../../../common/Modal";
 
 const CircleButton = styled.button<{ open: boolean }>`
   background: #33bb77;
@@ -64,10 +65,12 @@ const TodoCreate = ({
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState("");
   const [deadline, setDeadline] = useState("");
+  const [isModal, setIsModal] = useState(false);
 
   const handleToggle = () => setOpen(!open);
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) =>
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValue(e.target.value);
+  }
   const handleChangeDeadline = (_: any, dateString: string) => {
     const result = dateString.split('-').splice(1, 2).join(".");
     setDeadline(result);
@@ -75,6 +78,14 @@ const TodoCreate = ({
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault(); // 새로고침 방지
+    // if (e.target === "") {
+    //   setIsModal(prev => !prev)
+    //   return;
+    // }
+    if (value === "") {
+      setIsModal(prev => !prev);
+      return;
+    }
 
     createTodo({
       id: nextId,
@@ -90,6 +101,7 @@ const TodoCreate = ({
 
   return (
     <>
+      {isModal && <ModalContainer isModal={isModal} setIsModal={setIsModal} />}
       <InsertFormPositioner>
         <InsertForm onSubmit={handleSubmit}>
           <Input
