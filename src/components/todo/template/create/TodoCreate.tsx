@@ -96,6 +96,7 @@ const TodoCreate = ({
     incrementNextId(); // nextId 하나 증가
 
     setValue(""); // input 초기화
+    setDeadline("");
     setOpen(false); // open 닫기
   };
 
